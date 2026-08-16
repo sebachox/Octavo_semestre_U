@@ -165,11 +165,3 @@ def listar_productos():
     conexion.close()
     return [{"id": f[0], "nombre": f[1], "precio": f[2]} for f in filas]
 
-
-# ---------------------------------------------------------
-# 4. Permite correr el archivo directamente (botón "Run")
-#    además de con: python -m uvicorn app:app --reload
-# ---------------------------------------------------------
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
