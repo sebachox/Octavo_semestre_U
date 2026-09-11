@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import NodoServidor
-from .forms import NodoServidorForm
+from .models import NodoServidor, IncidenciaServidor
+from .forms import NodoServidorForm, IncidenciaServidorForm
 
 def eliminar_servidor(request, pk):
     nodo = get_object_or_404(NodoServidor, pk=pk)
@@ -35,8 +35,35 @@ def crear_servidor(request):
 
 def detalle_servidor(request, pk):
     nodo = get_object_or_404(NodoServidor, pk=pk)
-    return render(request, 'infraestructura/detalle.html', {'nodo': nodo})
+    incidencias = nodo.incidencias.all()
+    return render(request, "infraestructura/detalle.html", {
+        "nodo": nodo,
+        "incidencias": incidencias,
+    })
 
+
+def crear_incidencia(request, servidor_pk):
+    servidor = get_object_or_404(NodoServidor, pk=servidor_pk)
+
+    if request.method == "POST":
+        form = IncidenciaServidorForm(request.POST, initial={"servidor": servidor})
+        if form.is_valid():
+            form.save()
+            return redirect("detalle_servidor", pk=servidor.pk)
+    else:
+        form = IncidenciaServidorForm(initial={"servidor": servidor})
+
+    return render(request, "infraestructura/incidencia_form.html", {
+        "form": form,
+        "servidor": servidor,
+    })
+
+
+def resolver_incidencia(request, pk):
+    incidencia = get_object_or_404(IncidenciaServidor, pk=pk)
+    incidencia.resuelta = True
+    incidencia.save()
+    return redirect("detalle_servidor", pk=incidencia.servidor.pk)
 
 def lista_servidores(request):
 

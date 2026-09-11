@@ -7,4 +7,6 @@ urlpatterns = [
     path('servidor/nuevo/', views.crear_servidor, name='crear_servidor'),
     path('servidor/<int:pk>/editar/', views.editar_servidor, name='editar_servidor'),
     path('servidor/<int:pk>/eliminar/', views.eliminar_servidor, name='eliminar_servidor'),
+    path("servidor/<int:servidor_pk>/incidencia/nueva/", views.crear_incidencia, name="crear_incidencia"),
+    path("incidencia/<int:pk>/resolver/", views.resolver_incidencia, name="resolver_incidencia"),
 ]
